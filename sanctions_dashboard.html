@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sanctions & PEP Screening Engine</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600&display=swap');
+  :root {
+    --bg:      #0d1117;
+    --s1:      #161b22;
+    --s2:      #1c2333;
+    --border:  #21262d;
+    --text:    #c9d1d9;
+    --muted:   #484f58;
+    --high:    #da3633;
+    --medium:  #d29922;
+    --review:  #388bfd;
+    --clear:   #3fb950;
+    --pep:     #bc8cff;
+    --accent:  #58a6ff;
+    --gold:    #e3b341;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: var(--s1); border-bottom: 1px solid var(--border);
+    padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .hdr-left { display: flex; align-items: center; gap: 20px; }
+  .logo { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent); letter-spacing: 1px; }
+  .hdr-crumb { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+  .hdr-crumb span { color: var(--text); }
+  .hdr-right { display: flex; align-items: center; gap: 16px; }
+  .status-pill {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(63,185,80,.1); border: 1px solid rgba(63,185,80,.3);
+    border-radius: 20px; padding: 4px 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--clear); letter-spacing: 1px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--clear); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+  .clock { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+
+  /* LAYOUT */
+  .container { padding: 24px 28px; max-width: 1400px; margin: 0 auto; }
+  .page-title { font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .page-sub { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+  .page-sub span { color: var(--clear); font-family: 'JetBrains Mono', monospace; }
+
+  /* KPI CARDS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 22px; }
+  .kpi {
+    background: var(--s1); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+    border-top: 3px solid var(--kpi-color, var(--accent));
+    transition: border-color .2s;
+  }
+  .kpi-label { font-size: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .kpi-val   { font-size: 26px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: var(--kpi-color, #fff); line-height: 1; }
+  .kpi-sub   { font-size: 10px; color: var(--muted); margin-top: 5px; }
+
+  /* CARDS */
+  .card { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
+  .card-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px;
+    margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .chart-h { position: relative; height: 200px; }
+
+  /* GRIDS */
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .g2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .g1 { margin-bottom: 18px; }
+
+  /* MATCH SCORE GAUGE */
+  .gauge-wrap { display: flex; gap: 8px; flex-direction: column; }
+  .gauge-item { display: grid; grid-template-columns: 90px 1fr 40px; align-items: center; gap: 8px; }
+  .gauge-label { font-size: 11px; color: var(--text); font-family: 'JetBrains Mono', monospace; }
+  .gauge-bg { background: var(--s2); border-radius: 3px; height: 6px; overflow: hidden; }
+  .gauge-bar { height: 100%; border-radius: 3px; transition: width 1.3s ease; }
+  .gauge-count { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; text-align: right; }
+
+  /* METRIC ROWS */
+  .metric-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .metric-item:last-child { border: none; }
+  .metric-name { font-size: 12px; color: var(--muted); }
+  .metric-val  { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 600; }
+
+  /* CONFUSION MINI */
+  .cm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .cm-cell {
+    border-radius: 6px; padding: 12px 10px; text-align: center;
+  }
+  .cm-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 600; }
+  .cm-lbl { font-size: 10px; color: var(--muted); margin-top: 4px; letter-spacing: .5px; }
+
+  /* BADGE */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
+  .b-high   { background: rgba(218,54,51,.15); color: var(--high); }
+  .b-medium { background: rgba(210,153,34,.15); color: var(--medium); }
+  .b-review { background: rgba(56,139,253,.15); color: var(--review); }
+  .b-clear  { background: rgba(63,185,80,.1);  color: var(--clear); }
+  .b-pep    { background: rgba(188,140,255,.12);color: var(--pep); }
+  .b-sanc   { background: rgba(218,54,51,.12); color: var(--high); }
+
+  /* SCORE PILL */
+  .score { display: inline-block; padding: 2px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; }
+  .s90   { background: rgba(218,54,51,.2);  color: var(--high); }
+  .s75   { background: rgba(210,153,34,.2); color: var(--medium); }
+  .s60   { background: rgba(56,139,253,.2); color: var(--review); }
+  .slow  { background: rgba(63,185,80,.1);  color: var(--clear); }
+
+  /* TABLE */
+  .tbl-wrap { overflow-x: auto; margin-top: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 400; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); padding: 9px 12px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border); }
+  td { padding: 8px 12px; border-bottom: 1px solid #1a1f28; }
+  tbody tr:hover { background: var(--s2); }
+  .cname { font-weight: 500; color: #fff; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .match-name { color: var(--muted); font-size: 11px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cid { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); }
+
+  /* FILTERS */
+  .filters { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+  .fl { font-size: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
+  select, input[type=text] {
+    background: var(--s2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 6px; padding: 5px 11px; font-size: 12px;
+    font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s;
+  }
+  select:focus, input:focus { border-color: var(--accent); }
+  input[type=text] { min-width: 190px; }
+
+  /* WATCHLIST PILL */
+  .wl-list { display: flex; flex-direction: column; gap: 8px; }
+  .wl-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--s2); border-radius: 6px; border-left: 3px solid var(--wl-color, var(--accent)); }
+  .wl-name { font-size: 12px; color: var(--text); font-family: 'JetBrains Mono', monospace; }
+  .wl-cnt  { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--wl-color, var(--accent)); }
+
+  footer { margin-top: 32px; padding: 16px 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+  footer span { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-left">
+    <div class="logo">⟨/⟩ SANCTIONS · PEP SCREENER</div>
+    <div class="hdr-crumb">Watchlists: <span>OFAC · UN · EU · HMT · PEP</span></div>
+  </div>
+  <div class="hdr-right">
+    <div class="status-pill"><div class="dot"></div>SCREENING ACTIVE</div>
+    <div class="clock" id="clock">--:--:-- IST</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="page-title">Sanctions & PEP Screening Automation Engine</div>
+  <div class="page-sub">
+    Kishore U. · github.com/ukishore33 · linkedin.com/in/kishore-techie &nbsp;|&nbsp;
+    <span>rapidfuzz · Precision 97.1% · Recall 100% · F1 98.6%</span>
+  </div>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-grid">
+    <div class="kpi" style="--kpi-color:#58a6ff">
+      <div class="kpi-label">Total Screened</div>
+      <div class="kpi-val">86</div>
+      <div class="kpi-sub">Names in queue</div>
+    </div>
+    <div class="kpi" style="--kpi-color:#da3633">
+      <div class="kpi-label">HIGH Alerts</div>
+      <div class="kpi-val">33</div>
+      <div class="kpi-sub">Score ≥ 90</div>
+    </div>
+    <div class="kpi" style="--kpi-color:#d29922">
+      <div class="kpi-label">MEDIUM Alerts</div>
+      <div class="kpi-val">2</div>
+      <div class="kpi-sub">Score 75–89</div>
+    </div>
+    <div class="kpi" style="--kpi-color:#388bfd">
+      <div class="kpi-label">For Review</div>
+      <div class="kpi-val">4</div>
+      <div class="kpi-sub">Score 60–74</div>
+    </div>
+    <div class="kpi" style="--kpi-color:#3fb950">
+      <div class="kpi-label">Clear</div>
+      <div class="kpi-val">47</div>
+      <div class="kpi-sub">Score &lt; 60</div>
+    </div>
+    <div class="kpi" style="--kpi-color:#bc8cff">
+      <div class="kpi-label">PEP Matched</div>
+      <div class="kpi-val">9</div>
+      <div class="kpi-sub">Politically exposed</div>
+    </div>
+    <div class="kpi" style="--kpi-color:#da3633">
+      <div class="kpi-label">Sanctions Hit</div>
+      <div class="kpi-val">26</div>
+      <div class="kpi-sub">OFAC/UN/EU/HMT</div>
+    </div>
+  </div>
+
+  <!-- ROW 1: Alert breakdown | Score dist | Match type -->
+  <div class="g3">
+    <div class="card">
+      <div class="card-title">Alert Level Distribution</div>
+      <div class="chart-h"><canvas id="alertChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Match Score Distribution</div>
+      <div class="gauge-wrap" style="margin-top:8px">
+        <div class="gauge-item">
+          <div class="gauge-label" style="color:var(--high)">≥ 90 HIGH</div>
+          <div class="gauge-bg"><div class="gauge-bar" style="width:${Math.round(33/86*100)}%;background:var(--high)"></div></div>
+          <div class="gauge-count">33</div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-label" style="color:var(--medium)">75–89 MED</div>
+          <div class="gauge-bg"><div class="gauge-bar" style="width:${Math.round(2/86*100)}%;background:var(--medium)"></div></div>
+          <div class="gauge-count">2</div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-label" style="color:var(--review)">60–74 REV</div>
+          <div class="gauge-bg"><div class="gauge-bar" style="width:${Math.round(4/86*100)}%;background:var(--review)"></div></div>
+          <div class="gauge-count">4</div>
+        </div>
+        <div class="gauge-item">
+          <div class="gauge-label" style="color:var(--clear)">&lt; 60 CLEAR</div>
+          <div class="gauge-bg"><div class="gauge-bar" style="width:${Math.round(47/86*100)}%;background:var(--clear)"></div></div>
+          <div class="gauge-count">47</div>
+        </div>
+      </div>
+      <div style="margin-top:24px">
+        <div class="card-title" style="margin-bottom:10px">By Match Type</div>
+        <div class="chart-h" style="height:120px"><canvas id="typeChart"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Watchlist Breakdown</div>
+      <div class="wl-list" style="margin-top:4px">
+        <div class="wl-item" style="--wl-color:#da3633"><span class="wl-name">OFAC-SDN</span><span class="wl-cnt">14</span></div>
+        <div class="wl-item" style="--wl-color:#bc8cff"><span class="wl-name">PEP · Tier 1 Senior</span><span class="wl-cnt">6</span></div>
+        <div class="wl-item" style="--wl-color:#388bfd"><span class="wl-name">EU-Consolidated</span><span class="wl-cnt">5</span></div>
+        <div class="wl-item" style="--wl-color:#d29922"><span class="wl-name">UN-Consolidated</span><span class="wl-cnt">4</span></div>
+        <div class="wl-item" style="--wl-color:#e3b341"><span class="wl-name">HMT-UK</span><span class="wl-cnt">3</span></div>
+        <div class="wl-item" style="--wl-color:#bc8cff"><span class="wl-name">PEP · Other Tiers</span><span class="wl-cnt">3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Performance Metrics | Fuzzy Match Explanation -->
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Screening Performance Metrics</div>
+      <div class="metric-item">
+        <span class="metric-name">Precision (HIGH + MEDIUM alerts)</span>
+        <span class="metric-val" style="color:var(--clear)">97.14%</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-name">Recall (zero missed hits)</span>
+        <span class="metric-val" style="color:var(--clear)">100.00%</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-name">F1 Score</span>
+        <span class="metric-val" style="color:var(--clear)">98.55%</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-name">True Positives</span>
+        <span class="metric-val" style="color:var(--accent)">34</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-name">False Positives (false alerts)</span>
+        <span class="metric-val" style="color:var(--medium)">1</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-name">False Negatives (missed hits)</span>
+        <span class="metric-val" style="color:var(--clear)">0 ✓</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-name">Watchlist entries (names + aliases)</span>
+        <span class="metric-val" style="color:var(--accent)">55</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-name">Algorithm</span>
+        <span class="metric-val" style="color:var(--pep); font-size:11px">rapidfuzz · token_sort_ratio</span>
+      </div>
+      <!-- Confusion matrix -->
+      <div class="cm-grid">
+        <div class="cm-cell" style="background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.25)">
+          <div class="cm-val" style="color:var(--clear)">34</div><div class="cm-lbl">TRUE POSITIVE</div>
+        </div>
+        <div class="cm-cell" style="background:rgba(210,153,34,.1);border:1px solid rgba(210,153,34,.25)">
+          <div class="cm-val" style="color:var(--medium)">1</div><div class="cm-lbl">FALSE POSITIVE</div>
+        </div>
+        <div class="cm-cell" style="background:rgba(218,54,51,.08);border:1px solid rgba(218,54,51,.2)">
+          <div class="cm-val" style="color:var(--clear)">0</div><div class="cm-lbl">FALSE NEGATIVE</div>
+        </div>
+        <div class="cm-cell" style="background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.2)">
+          <div class="cm-val" style="color:var(--clear)">51</div><div class="cm-lbl">TRUE NEGATIVE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Fuzzy Match Technique</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+        <div style="background:var(--s2);border-radius:6px;padding:12px;border-left:3px solid var(--accent)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px">ALGORITHM</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">rapidfuzz.fuzz.token_sort_ratio</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Sorts tokens alphabetically before comparison — handles word-order variations and middle name reordering</div>
+        </div>
+        <div style="background:var(--s2);border-radius:6px;padding:12px;border-left:3px solid var(--high)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px">EXAMPLE · FUZZY HIT DETECTED</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text)">Query: <span style="color:#fff">"Ali Hasan Al-Farsi"</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);margin-top:4px">Matched: <span style="color:var(--high)">"Ali Hassan Al-Farsi"</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--medium);margin-top:4px">Score: <span style="color:var(--high)">96 / 100</span> → OFAC-SDN · Terrorism Financing</div>
+        </div>
+        <div style="background:var(--s2);border-radius:6px;padding:12px;border-left:3px solid var(--pep)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px">EXAMPLE · PEP MATCHED</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text)">Query: <span style="color:#fff">"Priya Nanda Kumar"</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);margin-top:4px">Matched: <span style="color:var(--pep)">"Priya Nandakumar"</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--medium);margin-top:4px">Score: <span style="color:var(--pep)">92 / 100</span> → PEP Tier 2 · State Chief Secretary</div>
+        </div>
+        <div style="background:var(--s2);border-radius:6px;padding:12px;border-left:3px solid var(--clear)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px">THRESHOLD LOGIC</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6">
+            <span style="color:var(--high)">≥ 90</span> → HIGH alert · Immediate escalation<br>
+            <span style="color:var(--medium)">75–89</span> → MEDIUM · Analyst review required<br>
+            <span style="color:var(--review)">60–74</span> → REVIEW · Enhanced due diligence<br>
+            <span style="color:var(--clear)">&lt; 60</span> → CLEAR · No match detected
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERT QUEUE TABLE -->
+  <div class="card g1">
+    <div class="card-title">
+      Alert Queue · Screening Results
+      <span id="rowCountBadge" style="background:var(--s2);color:var(--accent);border-radius:20px;padding:2px 10px;font-size:10px">39 alerts</span>
+    </div>
+    <div class="filters">
+      <span class="fl">Filter:</span>
+      <select id="alertFilter" onchange="filterTable()">
+        <option value="">All Alert Levels</option>
+        <option value="HIGH">HIGH Only</option>
+        <option value="MEDIUM">MEDIUM Only</option>
+        <option value="REVIEW">REVIEW Only</option>
+      </select>
+      <select id="typeFilter" onchange="filterTable()">
+        <option value="">All Types</option>
+        <option value="SANCTIONS">Sanctions</option>
+        <option value="PEP">PEP</option>
+      </select>
+      <select id="wlFilter" onchange="filterTable()">
+        <option value="">All Watchlists</option>
+        <option>OFAC-SDN</option>
+        <option>UN-Consolidated</option>
+        <option>EU-Consolidated</option>
+        <option>HMT-UK</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Search name / customer ID…" oninput="filterTable()"/>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>Cust. ID</th><th>Customer Name</th><th>Alert</th>
+          <th>Matched Name</th><th>Score</th><th>Type</th>
+          <th>Watchlist / Tier</th><th>Watchlist ID</th><th>Reason / Role</th><th>Match Country</th>
+        </tr></thead>
+        <tbody id="alertTable"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)" id="rowCount"></div>
+  </div>
+</div>
+
+<footer>
+  <div><span>Sanctions & PEP Screening Engine</span> · Kishore U. · github.com/ukishore33 · linkedin.com/in/kishore-techie</div>
+  <div>Python · rapidfuzz · OFAC · UN · EU · HMT · PEP Watchlists · Chart.js</div>
+</footer>
+
+<script>
+// Clock
+function tick(){ document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour12:false})+' IST'; }
+setInterval(tick,1000); tick();
+
+// Fix gauge bars (static HTML trick won't work, set with JS)
+document.querySelectorAll('.gauge-bar').forEach(b=>{
+  const w = b.style.width; if(w.includes('$')) { /* already set */ }
+});
+const gaugeData = [{w:Math.round(33/86*100),c:'var(--high)'},{w:Math.round(2/86*100),c:'var(--medium)'},{w:Math.round(4/86*100),c:'var(--review)'},{w:Math.round(47/86*100),c:'var(--clear)'}];
+document.querySelectorAll('.gauge-bar').forEach((b,i)=>{ if(gaugeData[i]){ b.style.width=gaugeData[i].w+'%'; b.style.background=gaugeData[i].c; } });
+
+// Charts
+Chart.defaults.color='#484f58';
+Chart.defaults.borderColor='#21262d';
+Chart.defaults.font.family="'Inter',sans-serif";
+
+new Chart(document.getElementById('alertChart'),{
+  type:'doughnut',
+  data:{
+    labels:['HIGH (33)','MEDIUM (2)','REVIEW (4)','CLEAR (47)'],
+    datasets:[{ data:[33,2,4,47], backgroundColor:['rgba(218,54,51,.85)','rgba(210,153,34,.85)','rgba(56,139,253,.85)','rgba(63,185,80,.4)'], borderWidth:0 }]
+  },
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'right', labels:{ font:{size:10}, boxWidth:10, padding:8 } } } }
+});
+
+new Chart(document.getElementById('typeChart'),{
+  type:'bar',
+  data:{
+    labels:['Sanctions','PEP'],
+    datasets:[{ data:[26,9], backgroundColor:['rgba(218,54,51,.75)','rgba(188,140,255,.75)'], borderRadius:5, borderWidth:0 }]
+  },
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} }, scales:{ x:{grid:{display:false}}, y:{grid:{color:'#21262d'}} } }
+});
+
+// TABLE DATA
+const tableData = [
+  // HIGH - SANCTIONS
+  {id:"CUS00013",name:"Ali Hassan Al-Farsi",alert:"HIGH",matched:"Ali Hassan Al-Farsi",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-001",reason:"Terrorism Financing",country:"Iran"},
+  {id:"CUS00027",name:"Ali Al Farsi",alert:"HIGH",matched:"Ali Hassan Al-Farsi",score:96,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-001",reason:"Terrorism Financing",country:"Iran"},
+  {id:"CUS00041",name:"Ali Hasan Al-Farsi",alert:"HIGH",matched:"Ali Hassan Al-Farsi",score:95,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-001",reason:"Terrorism Financing",country:"Iran"},
+  {id:"CUS00052",name:"North Star Trading LLC",alert:"HIGH",matched:"North Star Trading LLC",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-002",reason:"Sanctions Evasion",country:"Syria"},
+  {id:"CUS00019",name:"North Star Trade",alert:"HIGH",matched:"North Star Trading LLC",score:92,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-002",reason:"Sanctions Evasion",country:"Syria"},
+  {id:"CUS00033",name:"Mohammed Al-Rashidi",alert:"HIGH",matched:"Mohammed Al-Rashidi",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-003",reason:"WMD Proliferation",country:"Yemen"},
+  {id:"CUS00044",name:"Mohammed Rashidi",alert:"HIGH",matched:"Mohammed Al-Rashidi",score:90,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-003",reason:"WMD Proliferation",country:"Yemen"},
+  {id:"CUS00055",name:"Muhammed Al-Rashidi",alert:"HIGH",matched:"Mohammed Al-Rashidi",score:94,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-003",reason:"WMD Proliferation",country:"Yemen"},
+  {id:"CUS00061",name:"Pyongyang Capital Group",alert:"HIGH",matched:"Pyongyang Capital Group",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-004",reason:"Sanctions Evasion",country:"North Korea"},
+  {id:"CUS00071",name:"Viktor Petrov",alert:"HIGH",matched:"Viktor Petrov",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-005",reason:"Sectoral Sanctions",country:"Russia"},
+  {id:"CUS00072",name:"Victor Petrov",alert:"HIGH",matched:"Viktor Petrov",score:95,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-005",reason:"Sectoral Sanctions",country:"Russia"},
+  {id:"CUS00073",name:"V. Petrov",alert:"HIGH",matched:"V. Petrov",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-005",reason:"Sectoral Sanctions",country:"Russia"},
+  {id:"CUS00074",name:"Caspian Oil Holdings",alert:"HIGH",matched:"Caspian Oil Holdings",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-006",reason:"Energy Sector Sanctions",country:"Iran"},
+  {id:"CUS00075",name:"Ibrahim Kader Musa",alert:"HIGH",matched:"Ibrahim Kader Musa",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-007",reason:"Terrorism Financing",country:"Somalia"},
+  {id:"CUS00076",name:"Ibrahim Musa Kader",alert:"HIGH",matched:"Ibrahim Kader Musa",score:91,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-007",reason:"Terrorism Financing",country:"Somalia"},
+  {id:"CUS00077",name:"Ibrahim Musa",alert:"HIGH",matched:"Ibrahim Musa",score:100,type:"SANCTIONS",wl:"OFAC-SDN",wlid:"OFAC-007",reason:"Terrorism Financing",country:"Somalia"},
+  {id:"CUS00078",name:"Golden Triangle Ventures",alert:"HIGH",matched:"Golden Triangle Ventures",score:100,type:"SANCTIONS",wl:"UN-Consolidated",wlid:"UN-001",reason:"Drug Trafficking",country:"Myanmar"},
+  {id:"CUS00079",name:"GT Ventures",alert:"HIGH",matched:"GT Ventures",score:100,type:"SANCTIONS",wl:"UN-Consolidated",wlid:"UN-001",reason:"Drug Trafficking",country:"Myanmar"},
+  {id:"CUS00080",name:"Hamid Sultani",alert:"HIGH",matched:"Hamid Sultani",score:100,type:"SANCTIONS",wl:"UN-Consolidated",wlid:"UN-002",reason:"Taliban Association",country:"Afghanistan"},
+  {id:"CUS00081",name:"Hamid Sultanni",alert:"HIGH",matched:"Hamid Sultani",score:95,type:"SANCTIONS",wl:"UN-Consolidated",wlid:"UN-002",reason:"Taliban Association",country:"Afghanistan"},
+  {id:"CUS00082",name:"Yusuf Omar Al-Shabaab",alert:"HIGH",matched:"Yusuf Omar Al-Shabaab",score:100,type:"SANCTIONS",wl:"UN-Consolidated",wlid:"UN-003",reason:"Terrorism",country:"Somalia"},
+  {id:"CUS00083",name:"Donetsk Finance Corp",alert:"HIGH",matched:"Donetsk Finance Corp",score:100,type:"SANCTIONS",wl:"EU-Consolidated",wlid:"EU-001",reason:"Ukraine Conflict Sanctions",country:"Russia"},
+  {id:"CUS00084",name:"Donetsk Corp",alert:"HIGH",matched:"Donetsk Corp",score:100,type:"SANCTIONS",wl:"EU-Consolidated",wlid:"EU-001",reason:"Ukraine Conflict Sanctions",country:"Russia"},
+  {id:"CUS00085",name:"Sergei Volkov",alert:"HIGH",matched:"Sergei Volkov",score:100,type:"SANCTIONS",wl:"EU-Consolidated",wlid:"EU-002",reason:"Human Rights Violations",country:"Russia"},
+  {id:"CUS00086",name:"Alexander Kozlov",alert:"HIGH",matched:"Alexander Kozlov",score:100,type:"SANCTIONS",wl:"EU-Consolidated",wlid:"EU-003",reason:"Civil Society Repression",country:"Belarus"},
+  {id:"CUS00087",name:"Tehran Arms Brokers",alert:"HIGH",matched:"Tehran Arms Brokers",score:100,type:"SANCTIONS",wl:"HMT-UK",wlid:"HMT-001",reason:"Arms Embargo",country:"Iran"},
+  {id:"CUS00088",name:"Dmitri Sokolov",alert:"HIGH",matched:"Dmitri Sokolov",score:100,type:"SANCTIONS",wl:"HMT-UK",wlid:"HMT-002",reason:"Oligarch Sanctions",country:"Russia"},
+  {id:"CUS00089",name:"Dmitry Sokolov",alert:"HIGH",matched:"Dmitri Sokolov",score:95,type:"SANCTIONS",wl:"HMT-UK",wlid:"HMT-002",reason:"Oligarch Sanctions",country:"Russia"},
+  // PEP HIGH
+  {id:"CUS00090",name:"Rajendra Singh Chauhan",alert:"HIGH",matched:"Rajendra Singh Chauhan",score:100,type:"PEP",wl:"Tier 1 - Senior Official",wlid:"PEP-001",reason:"Minister of Finance",country:"India"},
+  {id:"CUS00091",name:"Rajendra Chauhan",alert:"HIGH",matched:"Rajendra Singh Chauhan",score:91,type:"PEP",wl:"Tier 1 - Senior Official",wlid:"PEP-001",reason:"Minister of Finance",country:"India"},
+  {id:"CUS00092",name:"Fatima Al-Zahra",alert:"HIGH",matched:"Fatima Al-Zahra",score:100,type:"PEP",wl:"Tier 1 - Senior Official",wlid:"PEP-005",reason:"Minister of Trade",country:"Qatar"},
+  {id:"CUS00093",name:"Carlos Eduardo Vargas",alert:"HIGH",matched:"Carlos Eduardo Vargas",score:100,type:"PEP",wl:"Tier 1 - Senior Official",wlid:"PEP-004",reason:"Governor - Central Bank",country:"Brazil"},
+  {id:"CUS00094",name:"Li Wei Zhang",alert:"HIGH",matched:"Li Wei Zhang",score:100,type:"PEP",wl:"Tier 2 - SOE Executive",wlid:"PEP-003",reason:"State-Owned Enterprise CEO",country:"China"},
+  // MEDIUM
+  {id:"CUS00095",name:"Ahmed Abdullah Al Mansouri",alert:"MEDIUM",matched:"Ahmed Abdullah Al-Mansouri",score:88,type:"PEP",wl:"Tier 1 - Senior Official",wlid:"PEP-002",reason:"Deputy Prime Minister",country:"UAE"},
+  {id:"CUS00096",name:"A. Kozlov",alert:"MEDIUM",matched:"A. Kozlov",score:79,type:"SANCTIONS",wl:"EU-Consolidated",wlid:"EU-003",reason:"Civil Society Repression",country:"Belarus"},
+  // REVIEW
+  {id:"CUS00097",name:"Priya Nanda Kumar",alert:"REVIEW",matched:"Priya Nandakumar",score:73,type:"PEP",wl:"Tier 2 - Senior Civil Servant",wlid:"PEP-009",reason:"State Chief Secretary",country:"India"},
+  {id:"CUS00098",name:"Carlos Vargas Eduardo",alert:"REVIEW",matched:"Carlos Eduardo Vargas",score:67,type:"PEP",wl:"Tier 1 - Senior Official",wlid:"PEP-004",reason:"Governor - Central Bank",country:"Brazil"},
+  {id:"CUS00099",name:"Fatima Al Zahra",alert:"REVIEW",matched:"Fatima Al-Zahra",score:65,type:"PEP",wl:"Tier 1 - Senior Official",wlid:"PEP-005",reason:"Minister of Trade",country:"Qatar"},
+  {id:"CUS00100",name:"Tehran Brokers",alert:"REVIEW",matched:"Tehran Arms Brokers",score:62,type:"SANCTIONS",wl:"HMT-UK",wlid:"HMT-001",reason:"Arms Embargo",country:"Iran"},
+];
+
+function filterTable(){
+  const alert  = document.getElementById('alertFilter').value;
+  const type   = document.getElementById('typeFilter').value;
+  const wl     = document.getElementById('wlFilter').value;
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  let f = tableData.filter(r=>{
+    if(alert && r.alert !== alert) return false;
+    if(type  && r.type  !== type)  return false;
+    if(wl    && r.wl    !== wl)    return false;
+    if(search && !r.name.toLowerCase().includes(search) && !r.id.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  renderTable(f);
+}
+
+function renderTable(data){
+  const tbody = document.getElementById('alertTable');
+  tbody.innerHTML = '';
+  data.forEach(r=>{
+    const aCls = r.alert==='HIGH'?'b-high':r.alert==='MEDIUM'?'b-medium':'b-review';
+    const tCls = r.type==='PEP'?'b-pep':'b-sanc';
+    const sCls = r.score>=90?'s90':r.score>=75?'s75':r.score>=60?'s60':'slow';
+    tbody.innerHTML += `<tr>
+      <td class="cid">${r.id}</td>
+      <td><div class="cname" title="${r.name}">${r.name}</div></td>
+      <td><span class="badge ${aCls}">${r.alert}</span></td>
+      <td><div class="match-name" title="${r.matched}">${r.matched}</div></td>
+      <td><span class="score ${sCls}">${r.score}</span></td>
+      <td><span class="badge ${tCls}">${r.type}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">${r.wl}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent)">${r.wlid}</td>
+      <td style="font-size:11px;color:var(--muted)">${r.reason}</td>
+      <td style="font-size:11px">${r.country}</td>
+    </tr>`;
+  });
+  document.getElementById('rowCount').textContent = `Showing ${data.length} of ${tableData.length} alerts`;
+  document.getElementById('rowCountBadge').textContent = `${data.length} alerts`;
+}
+renderTable(tableData);
+</script>
+</body>
+</html>
