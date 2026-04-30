@@ -1,0 +1,87 @@
+customer_id,customer_name,customer_type,nationality,account_type,best_match_name,match_score,alert_level,match_type,watchlist_id,watchlist,reason,match_nationality,true_label
+CUS00001,Park Ji Yeon,Individual,USA,Trade Finance,Tehran Arms Brokers,38.7,CLEAR,—,HMT-001,HMT-UK,Arms Embargo,Iran,clean
+CUS00009,Bogumil Kowalski,Individual,Brazil,Savings,Bogdan Wojciechowski,50.0,CLEAR,—,PEP-010,Tier 1 - Senior Official,Defence Minister,Poland,clean
+CUS00029,Sarah Elizabeth Thompson,Corporate,Singapore,Investment,North Star Trade,40.0,CLEAR,—,OFAC-002,OFAC-SDN,Sanctions Evasion,Syria,clean
+CUS00031,Tran Van Minh,Corporate,Singapore,Trade Finance,Nguyen Van Thanh,62.1,REVIEW,PEP,PEP-007,Tier 1 - Senior Official,Vice Minister - Interior,Vietnam,clean
+CUS00065,Ali Al Farsi,Corporate,Syria,Investment,Ali Al Farsi,100.0,HIGH,SANCTIONS,OFAC-001,OFAC-SDN,Terrorism Financing,Iran,hit
+CUS00010,Takeshi Yamamoto,Individual,Singapore,Savings,Mohammed Al-Rashidi,45.7,CLEAR,—,OFAC-003,OFAC-SDN,WMD Proliferation,Yemen,clean
+CUS00053,Mohammed Al-Rashidi,Individual,Syria,Current,Mohammed Al-Rashidi,100.0,HIGH,SANCTIONS,OFAC-003,OFAC-SDN,WMD Proliferation,Yemen,hit
+CUS00049,Yuki Tanaka,Individual,USA,Savings,Priya Nandakumar,51.9,CLEAR,—,PEP-009,Tier 2 - Senior Civil Servant,State Chief Secretary,India,clean
+CUS00025,Suresh Babu,Individual,India,Savings,GT Ventures,45.5,CLEAR,—,UN-001,UN-Consolidated,Drug Trafficking,Myanmar,clean
+CUS00051,Ali Hassan Al-Farsi,Corporate,Syria,Investment,Ali Hassan Al-Farsi,100.0,HIGH,SANCTIONS,OFAC-001,OFAC-SDN,Terrorism Financing,Iran,hit
+CUS00063,Carlos Eduardo Vargas,Individual,Myanmar,Current,Carlos Eduardo Vargas,100.0,HIGH,PEP,PEP-004,Tier 1 - Senior Official,Governor - Central Bank,Brazil,hit
+CUS00045,Patrick O'Brien,Corporate,USA,Investment,Ali Al Farsi,37.0,CLEAR,—,OFAC-001,OFAC-SDN,Terrorism Financing,Iran,clean
+CUS00042,Kavya Reddy,Corporate,USA,Trade Finance,Oleksandr Kovalenko,40.0,CLEAR,—,PEP-006,Tier 2 - Legislator,Parliament Member,Ukraine,clean
+CUS00054,Pyongyang Capital Group,Corporate,Yemen,Current,Pyongyang Capital Group,100.0,HIGH,SANCTIONS,OFAC-004,OFAC-SDN,Sanctions Evasion,North Korea,hit
+CUS00058,Yusuf Omar Al-Shabaab,Corporate,Russia,Investment,Yusuf Omar Al-Shabaab,100.0,HIGH,SANCTIONS,UN-003,UN-Consolidated,Terrorism,Somalia,hit
+CUS00019,Sanjay Mehta,Individual,India,Savings,Nguyen Van Thanh,42.9,CLEAR,—,PEP-007,Tier 1 - Senior Official,Vice Minister - Interior,Vietnam,clean
+CUS00041,Rohit Agarwal,Individual,Japan,Savings,Amara Diallo Kouyate,48.5,CLEAR,—,PEP-008,Tier 1 - Former Head of State,Former President,Mali,clean
+CUS00048,Miriam Cohen,Corporate,Singapore,Current,Golden Triangle,51.9,CLEAR,—,UN-001,UN-Consolidated,Drug Trafficking,Myanmar,clean
+CUS00027,Sunita Devi Gupta,Individual,Germany,Savings,Hamid Sultani,46.7,CLEAR,—,UN-002,UN-Consolidated,Taliban Association,Afghanistan,clean
+CUS00080,Sergei Volkov,Individual,UAE,Savings,Sergei Volkov,100.0,HIGH,SANCTIONS,EU-002,EU-Consolidated,Human Rights Violations,Russia,fuzzy_hit
+CUS00075,Ali Hasan Al-Farsi,Individual,India,Current,Ali Hassan Al-Farsi,97.3,HIGH,SANCTIONS,OFAC-001,OFAC-SDN,Terrorism Financing,Iran,fuzzy_hit
+CUS00069,North Star Trade,Corporate,Somalia,Investment,North Star Trade,100.0,HIGH,SANCTIONS,OFAC-002,OFAC-SDN,Sanctions Evasion,Syria,hit
+CUS00008,Wanjiku Kamau,Individual,Singapore,Investment,Hamid Sultani,46.2,CLEAR,—,UN-002,UN-Consolidated,Taliban Association,Afghanistan,clean
+CUS00016,Omar Abdallah Hassan,Corporate,USA,Current,Ali Hassan Al-Farsi,51.3,CLEAR,—,OFAC-001,OFAC-SDN,Terrorism Financing,Iran,clean
+CUS00086,Priya Nanda Kumar,Individual,India,Savings,Priya Nandakumar,66.7,REVIEW,PEP,PEP-009,Tier 2 - Senior Civil Servant,State Chief Secretary,India,fuzzy_hit
+CUS00050,Wei Chen Liu,Corporate,USA,Current,Li Wei Zhang,50.0,CLEAR,—,PEP-003,Tier 2 - SOE Executive,State-Owned Enterprise CEO,China,clean
+CUS00081,Aleksander Kozlov,Individual,India,Current,Alexander Kozlov,90.9,HIGH,SANCTIONS,EU-003,EU-Consolidated,Repression of Civil Society,Belarus,fuzzy_hit
+CUS00021,Andre Dubois,Corporate,Singapore,Savings,Alexander Kozlov,42.9,CLEAR,—,EU-003,EU-Consolidated,Repression of Civil Society,Belarus,clean
+CUS00039,Neha Joshi,Individual,USA,Current,Tehran Brokers,50.0,CLEAR,—,HMT-001,HMT-UK,Arms Embargo,Iran,clean
+CUS00085,Carlos Vargas Eduardo,Individual,Russia,Savings,Carlos Eduardo Vargas,100.0,HIGH,PEP,PEP-004,Tier 1 - Senior Official,Governor - Central Bank,Brazil,fuzzy_hit
+CUS00017,Priya Venkataraman,Individual,Singapore,Current,Viktor Petrov,45.2,CLEAR,—,OFAC-005,OFAC-SDN,Sectoral Sanctions,Russia,clean
+CUS00072,Tehran Brokers,Corporate,Somalia,Current,Tehran Brokers,100.0,HIGH,SANCTIONS,HMT-001,HMT-UK,Arms Embargo,Iran,hit
+CUS00057,Hamid Sultani,Corporate,North Korea,Investment,Hamid Sultani,100.0,HIGH,SANCTIONS,UN-002,UN-Consolidated,Taliban Association,Afghanistan,hit
+CUS00020,Chiara Romano,Individual,Japan,Investment,Rajendra Singh Chauhan,45.7,CLEAR,—,PEP-001,Tier 1 - Senior Official,Minister of Finance,India,clean
+CUS00083,Rajendra Chauhan,Individual,UAE,Savings,Rajendra Singh Chauhan,84.2,MEDIUM,PEP,PEP-001,Tier 1 - Senior Official,Minister of Finance,India,fuzzy_hit
+CUS00052,North Star Trading LLC,Corporate,Russia,Current,North Star Trading LLC,100.0,HIGH,SANCTIONS,OFAC-002,OFAC-SDN,Sanctions Evasion,Syria,hit
+CUS00084,Fatima Al Zahra,Individual,Somalia,Current,Fatima Al-Zahra,60.0,REVIEW,PEP,PEP-005,Tier 1 - Senior Official,Minister of Trade,Qatar,fuzzy_hit
+CUS00036,Klaus Werner Braun,Individual,Singapore,Savings,Tehran Brokers,43.8,CLEAR,—,HMT-001,HMT-UK,Arms Embargo,Iran,clean
+CUS00079,Hamid Sultanni,Individual,Brazil,Savings,Hamid Sultani,96.3,HIGH,SANCTIONS,UN-002,UN-Consolidated,Taliban Association,Afghanistan,fuzzy_hit
+CUS00011,Meena Pillai,Individual,Brazil,Trade Finance,Priya Nandakumar,42.9,CLEAR,—,PEP-009,Tier 2 - Senior Civil Servant,State Chief Secretary,India,clean
+CUS00037,Fatimah Binte Abdullah,Individual,UK,Trade Finance,Fatima Al-Zahra,59.5,CLEAR,—,PEP-005,Tier 1 - Senior Official,Minister of Trade,Qatar,clean
+CUS00003,Lakshmi Narayanan,Individual,Japan,Current,Priya Nandakumar,42.4,CLEAR,—,PEP-009,Tier 2 - Senior Civil Servant,State Chief Secretary,India,clean
+CUS00082,Dmitry Sokolov,Individual,Somalia,Current,Dmitri Sokolov,92.9,HIGH,SANCTIONS,HMT-002,HMT-UK,Oligarch Sanctions,Russia,fuzzy_hit
+CUS00015,Ramesh Kumar Sharma,Corporate,USA,Investment,Rajendra Singh Chauhan,43.9,CLEAR,—,PEP-001,Tier 1 - Senior Official,Minister of Finance,India,clean
+CUS00034,Mei Lin Zhou,Corporate,Japan,Investment,Li Wei Zhang,66.7,REVIEW,PEP,PEP-003,Tier 2 - SOE Executive,State-Owned Enterprise CEO,China,clean
+CUS00024,Rania Khalil,Individual,India,Investment,Hamid Sultani,48.0,CLEAR,—,UN-002,UN-Consolidated,Taliban Association,Afghanistan,clean
+CUS00078,Ibrahim Musa Kader,Individual,UAE,Current,Ibrahim Kader Musa,100.0,HIGH,SANCTIONS,OFAC-007,OFAC-SDN,Terrorism Financing,Somalia,fuzzy_hit
+CUS00071,Donetsk Corp,Individual,North Korea,Current,Donetsk Corp,100.0,HIGH,SANCTIONS,EU-001,EU-Consolidated,Ukraine Conflict Sanctions,Russia,hit
+CUS00070,GT Ventures,Corporate,North Korea,Current,GT Ventures,100.0,HIGH,SANCTIONS,UN-001,UN-Consolidated,Drug Trafficking,Myanmar,hit
+CUS00035,Tariq Al-Hussain,Corporate,Japan,Trade Finance,Ali Al Farsi,50.0,CLEAR,—,OFAC-001,OFAC-SDN,Terrorism Financing,Iran,clean
+CUS00067,V. Petrov,Individual,Russia,Current,V. Petrov,100.0,HIGH,SANCTIONS,OFAC-005,OFAC-SDN,Sectoral Sanctions,Russia,hit
+CUS00077,Victor Petrov,Individual,Somalia,Current,Viktor Petrov,92.3,HIGH,SANCTIONS,OFAC-005,OFAC-SDN,Sectoral Sanctions,Russia,fuzzy_hit
+CUS00068,A. Kozlov,Individual,Iran,Current,A. Kozlov,100.0,HIGH,SANCTIONS,EU-003,EU-Consolidated,Repression of Civil Society,Belarus,hit
+CUS00032,Ananya Krishnamurthy,Individual,Australia,Trade Finance,Amara Diallo Kouyate,40.0,CLEAR,—,PEP-008,Tier 1 - Former Head of State,Former President,Mali,clean
+CUS00076,Muhammed Al-Rashidi,Individual,Iran,Current,Mohammed Al-Rashidi,94.7,HIGH,SANCTIONS,OFAC-003,OFAC-SDN,WMD Proliferation,Yemen,fuzzy_hit
+CUS00047,Pooja Malhotra,Corporate,UK,Savings,Fatima Al-Zahra,41.4,CLEAR,—,PEP-005,Tier 1 - Senior Official,Minister of Trade,Qatar,clean
+CUS00073,Priya Nandakumar,Corporate,Syria,Current,Priya Nandakumar,100.0,HIGH,PEP,PEP-009,Tier 2 - Senior Civil Servant,State Chief Secretary,India,hit
+CUS00060,Dmitri Sokolov,Corporate,Myanmar,Investment,Dmitri Sokolov,100.0,HIGH,SANCTIONS,HMT-002,HMT-UK,Oligarch Sanctions,Russia,hit
+CUS00006,Deepika Subramaniam,Individual,India,Investment,Hamid Sultani,43.8,CLEAR,—,UN-002,UN-Consolidated,Taliban Association,Afghanistan,clean
+CUS00002,Sofia Angelova,Corporate,USA,Trade Finance,Fatima Al-Zahra,41.4,CLEAR,—,PEP-005,Tier 1 - Senior Official,Minister of Trade,Qatar,clean
+CUS00059,Sergei Volkov,Corporate,Syria,Investment,Sergei Volkov,100.0,HIGH,SANCTIONS,EU-002,EU-Consolidated,Human Rights Violations,Russia,hit
+CUS00028,Amara Diallo,Corporate,UK,Savings,Amara Diallo Kouyate,75.0,MEDIUM,PEP,PEP-008,Tier 1 - Former Head of State,Former President,Mali,clean
+CUS00040,David Okonkwo,Corporate,UK,Trade Finance,Dmitri Sokolov,44.4,CLEAR,—,HMT-002,HMT-UK,Oligarch Sanctions,Russia,clean
+CUS00014,Sipho Dlamini,Individual,Germany,Savings,Dmitri S.,54.5,CLEAR,—,HMT-002,HMT-UK,Oligarch Sanctions,Russia,clean
+CUS00062,Fatima Al-Zahra,Individual,Syria,Current,Fatima Al-Zahra,100.0,HIGH,PEP,PEP-005,Tier 1 - Senior Official,Minister of Trade,Qatar,hit
+CUS00005,Vikas Tiwari,Individual,Japan,Savings,Ali Hassan Al-Farsi,45.2,CLEAR,—,OFAC-001,OFAC-SDN,Terrorism Financing,Iran,clean
+CUS00026,Maria Gonzalez Rivera,Individual,India,Savings,Golden Triangle,50.0,CLEAR,—,UN-001,UN-Consolidated,Drug Trafficking,Myanmar,clean
+CUS00030,John Michael Williams,Corporate,Japan,Current,Mohammed Rashidi,37.8,CLEAR,—,OFAC-003,OFAC-SDN,WMD Proliferation,Yemen,clean
+CUS00056,Ibrahim Kader Musa,Individual,Syria,Investment,Ibrahim Kader Musa,100.0,HIGH,SANCTIONS,OFAC-007,OFAC-SDN,Terrorism Financing,Somalia,hit
+CUS00066,Mohammed Rashidi,Individual,Somalia,Investment,Mohammed Rashidi,100.0,HIGH,SANCTIONS,OFAC-003,OFAC-SDN,WMD Proliferation,Yemen,hit
+CUS00013,Arjun Kapoor,Corporate,UK,Savings,A. Kozlov,47.6,CLEAR,—,EU-003,EU-Consolidated,Repression of Civil Society,Belarus,clean
+CUS00061,Rajendra Singh Chauhan,Individual,Russia,Current,Rajendra Singh Chauhan,100.0,HIGH,PEP,PEP-001,Tier 1 - Senior Official,Minister of Finance,India,hit
+CUS00004,Nguyen Thi Huong,Individual,Brazil,Investment,Nguyen Van Thanh,56.2,CLEAR,—,PEP-007,Tier 1 - Senior Official,Vice Minister - Interior,Vietnam,clean
+CUS00055,Viktor Petrov,Individual,Somalia,Investment,Viktor Petrov,100.0,HIGH,SANCTIONS,OFAC-005,OFAC-SDN,Sectoral Sanctions,Russia,hit
+CUS00043,Hana Novakova,Corporate,India,Savings,S. Volkov,45.5,CLEAR,—,EU-002,EU-Consolidated,Human Rights Violations,Russia,clean
+CUS00023,Dinesh Choudhary,Corporate,Singapore,Investment,Donetsk Corp,57.1,CLEAR,—,EU-001,EU-Consolidated,Ukraine Conflict Sanctions,Russia,clean
+CUS00018,Emeka Okafor,Individual,UK,Current,Oleksandr Kovalenko,45.2,CLEAR,—,PEP-006,Tier 2 - Legislator,Parliament Member,Ukraine,clean
+CUS00033,Ivan Dimitrov,Individual,Singapore,Trade Finance,Dmitri S.,54.5,CLEAR,—,HMT-002,HMT-UK,Oligarch Sanctions,Russia,clean
+CUS00012,Robert James Anderson,Corporate,India,Savings,Tehran Arms Brokers,45.0,CLEAR,—,HMT-001,HMT-UK,Arms Embargo,Iran,clean
+CUS00046,Anastasia Morozova,Individual,USA,Savings,A. Kozlov,44.4,CLEAR,—,EU-003,EU-Consolidated,Repression of Civil Society,Belarus,clean
+CUS00044,Bjorn Eriksson,Corporate,UK,Investment,Tehran Brokers,42.9,CLEAR,—,HMT-001,HMT-UK,Arms Embargo,Iran,clean
+CUS00038,Aisha Bah,Individual,Germany,Savings,Fatima Al-Zahra,41.7,CLEAR,—,PEP-005,Tier 1 - Senior Official,Minister of Trade,Qatar,clean
+CUS00074,Ahmed Abdullah Al Mansouri,Corporate,Myanmar,Investment,Ahmed Abdullah Al-Mansouri,96.2,HIGH,PEP,PEP-002,Tier 1 - Senior Official,Deputy Prime Minister,UAE,hit
+CUS00064,Li Wei Zhang,Corporate,Russia,Current,Li Wei Zhang,100.0,HIGH,PEP,PEP-003,Tier 2 - SOE Executive,State-Owned Enterprise CEO,China,hit
+CUS00007,Elena Petrova,Individual,Australia,Investment,V. Petrov,54.5,CLEAR,—,OFAC-005,OFAC-SDN,Sectoral Sanctions,Russia,clean
+CUS00022,Arun Prakash Nair,Corporate,Japan,Trade Finance,North Star Trade,42.4,CLEAR,—,OFAC-002,OFAC-SDN,Sanctions Evasion,Syria,clean

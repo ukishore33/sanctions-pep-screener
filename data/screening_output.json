@@ -1,0 +1,70 @@
+{
+  "summary": {
+    "total_screened": 86,
+    "high_alerts": 33,
+    "medium_alerts": 2,
+    "review_alerts": 4,
+    "clear": 47,
+    "watchlist_size": 55,
+    "sanctions_entries": 15,
+    "pep_entries": 10
+  },
+  "performance": {
+    "precision": 0.9714,
+    "recall": 1.0,
+    "f1_score": 0.9855,
+    "true_positives": 34,
+    "false_positives": 1,
+    "false_negatives": 0
+  },
+  "wl_breakdown": [
+    {
+      "watchlist": "OFAC-SDN",
+      "count": 14
+    },
+    {
+      "watchlist": "Tier 1 - Senior Official",
+      "count": 6
+    },
+    {
+      "watchlist": "EU-Consolidated",
+      "count": 5
+    },
+    {
+      "watchlist": "UN-Consolidated",
+      "count": 4
+    },
+    {
+      "watchlist": "HMT-UK",
+      "count": 3
+    },
+    {
+      "watchlist": "Tier 1 - Former Head of State",
+      "count": 1
+    },
+    {
+      "watchlist": "Tier 2 - SOE Executive",
+      "count": 1
+    },
+    {
+      "watchlist": "Tier 2 - Senior Civil Servant",
+      "count": 1
+    }
+  ],
+  "type_breakdown": [
+    {
+      "match_type": "PEP",
+      "count": 9
+    },
+    {
+      "match_type": "SANCTIONS",
+      "count": 26
+    }
+  ],
+  "score_dist": {
+    "90_100": 33,
+    "75_89": 2,
+    "60_74": 4,
+    "below_60": 47
+  }
+}

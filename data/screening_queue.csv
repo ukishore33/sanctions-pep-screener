@@ -1,0 +1,87 @@
+customer_id,customer_name,customer_type,nationality,account_type,_true_label
+CUS00001,Park Ji Yeon,Individual,USA,Trade Finance,clean
+CUS00009,Bogumil Kowalski,Individual,Brazil,Savings,clean
+CUS00029,Sarah Elizabeth Thompson,Corporate,Singapore,Investment,clean
+CUS00031,Tran Van Minh,Corporate,Singapore,Trade Finance,clean
+CUS00065,Ali Al Farsi,Corporate,Syria,Investment,hit
+CUS00010,Takeshi Yamamoto,Individual,Singapore,Savings,clean
+CUS00053,Mohammed Al-Rashidi,Individual,Syria,Current,hit
+CUS00049,Yuki Tanaka,Individual,USA,Savings,clean
+CUS00025,Suresh Babu,Individual,India,Savings,clean
+CUS00051,Ali Hassan Al-Farsi,Corporate,Syria,Investment,hit
+CUS00063,Carlos Eduardo Vargas,Individual,Myanmar,Current,hit
+CUS00045,Patrick O'Brien,Corporate,USA,Investment,clean
+CUS00042,Kavya Reddy,Corporate,USA,Trade Finance,clean
+CUS00054,Pyongyang Capital Group,Corporate,Yemen,Current,hit
+CUS00058,Yusuf Omar Al-Shabaab,Corporate,Russia,Investment,hit
+CUS00019,Sanjay Mehta,Individual,India,Savings,clean
+CUS00041,Rohit Agarwal,Individual,Japan,Savings,clean
+CUS00048,Miriam Cohen,Corporate,Singapore,Current,clean
+CUS00027,Sunita Devi Gupta,Individual,Germany,Savings,clean
+CUS00080,Sergei Volkov,Individual,UAE,Savings,fuzzy_hit
+CUS00075,Ali Hasan Al-Farsi,Individual,India,Current,fuzzy_hit
+CUS00069,North Star Trade,Corporate,Somalia,Investment,hit
+CUS00008,Wanjiku Kamau,Individual,Singapore,Investment,clean
+CUS00016,Omar Abdallah Hassan,Corporate,USA,Current,clean
+CUS00086,Priya Nanda Kumar,Individual,India,Savings,fuzzy_hit
+CUS00050,Wei Chen Liu,Corporate,USA,Current,clean
+CUS00081,Aleksander Kozlov,Individual,India,Current,fuzzy_hit
+CUS00021,Andre Dubois,Corporate,Singapore,Savings,clean
+CUS00039,Neha Joshi,Individual,USA,Current,clean
+CUS00085,Carlos Vargas Eduardo,Individual,Russia,Savings,fuzzy_hit
+CUS00017,Priya Venkataraman,Individual,Singapore,Current,clean
+CUS00072,Tehran Brokers,Corporate,Somalia,Current,hit
+CUS00057,Hamid Sultani,Corporate,North Korea,Investment,hit
+CUS00020,Chiara Romano,Individual,Japan,Investment,clean
+CUS00083,Rajendra Chauhan,Individual,UAE,Savings,fuzzy_hit
+CUS00052,North Star Trading LLC,Corporate,Russia,Current,hit
+CUS00084,Fatima Al Zahra,Individual,Somalia,Current,fuzzy_hit
+CUS00036,Klaus Werner Braun,Individual,Singapore,Savings,clean
+CUS00079,Hamid Sultanni,Individual,Brazil,Savings,fuzzy_hit
+CUS00011,Meena Pillai,Individual,Brazil,Trade Finance,clean
+CUS00037,Fatimah Binte Abdullah,Individual,UK,Trade Finance,clean
+CUS00003,Lakshmi Narayanan,Individual,Japan,Current,clean
+CUS00082,Dmitry Sokolov,Individual,Somalia,Current,fuzzy_hit
+CUS00015,Ramesh Kumar Sharma,Corporate,USA,Investment,clean
+CUS00034,Mei Lin Zhou,Corporate,Japan,Investment,clean
+CUS00024,Rania Khalil,Individual,India,Investment,clean
+CUS00078,Ibrahim Musa Kader,Individual,UAE,Current,fuzzy_hit
+CUS00071,Donetsk Corp,Individual,North Korea,Current,hit
+CUS00070,GT Ventures,Corporate,North Korea,Current,hit
+CUS00035,Tariq Al-Hussain,Corporate,Japan,Trade Finance,clean
+CUS00067,V. Petrov,Individual,Russia,Current,hit
+CUS00077,Victor Petrov,Individual,Somalia,Current,fuzzy_hit
+CUS00068,A. Kozlov,Individual,Iran,Current,hit
+CUS00032,Ananya Krishnamurthy,Individual,Australia,Trade Finance,clean
+CUS00076,Muhammed Al-Rashidi,Individual,Iran,Current,fuzzy_hit
+CUS00047,Pooja Malhotra,Corporate,UK,Savings,clean
+CUS00073,Priya Nandakumar,Corporate,Syria,Current,hit
+CUS00060,Dmitri Sokolov,Corporate,Myanmar,Investment,hit
+CUS00006,Deepika Subramaniam,Individual,India,Investment,clean
+CUS00002,Sofia Angelova,Corporate,USA,Trade Finance,clean
+CUS00059,Sergei Volkov,Corporate,Syria,Investment,hit
+CUS00028,Amara Diallo,Corporate,UK,Savings,clean
+CUS00040,David Okonkwo,Corporate,UK,Trade Finance,clean
+CUS00014,Sipho Dlamini,Individual,Germany,Savings,clean
+CUS00062,Fatima Al-Zahra,Individual,Syria,Current,hit
+CUS00005,Vikas Tiwari,Individual,Japan,Savings,clean
+CUS00026,Maria Gonzalez Rivera,Individual,India,Savings,clean
+CUS00030,John Michael Williams,Corporate,Japan,Current,clean
+CUS00056,Ibrahim Kader Musa,Individual,Syria,Investment,hit
+CUS00066,Mohammed Rashidi,Individual,Somalia,Investment,hit
+CUS00013,Arjun Kapoor,Corporate,UK,Savings,clean
+CUS00061,Rajendra Singh Chauhan,Individual,Russia,Current,hit
+CUS00004,Nguyen Thi Huong,Individual,Brazil,Investment,clean
+CUS00055,Viktor Petrov,Individual,Somalia,Investment,hit
+CUS00043,Hana Novakova,Corporate,India,Savings,clean
+CUS00023,Dinesh Choudhary,Corporate,Singapore,Investment,clean
+CUS00018,Emeka Okafor,Individual,UK,Current,clean
+CUS00033,Ivan Dimitrov,Individual,Singapore,Trade Finance,clean
+CUS00012,Robert James Anderson,Corporate,India,Savings,clean
+CUS00046,Anastasia Morozova,Individual,USA,Savings,clean
+CUS00044,Bjorn Eriksson,Corporate,UK,Investment,clean
+CUS00038,Aisha Bah,Individual,Germany,Savings,clean
+CUS00074,Ahmed Abdullah Al Mansouri,Corporate,Myanmar,Investment,hit
+CUS00064,Li Wei Zhang,Corporate,Russia,Current,hit
+CUS00007,Elena Petrova,Individual,Australia,Investment,clean
+CUS00022,Arun Prakash Nair,Corporate,Japan,Trade Finance,clean

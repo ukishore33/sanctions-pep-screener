@@ -5,6 +5,8 @@ Description: Simulates OFAC/UN/EU sanctions list + PEP database screening
              using fuzzy name matching (rapidfuzz) — mirrors World-Check workflow
 """
 
+
+
 import pandas as pd
 import numpy as np
 import json
@@ -136,14 +138,14 @@ def generate_screening_queue(n_clean=150):
 
     random.shuffle(records)
     df = pd.DataFrame(records)
-    df.to_csv("/home/claude/sanctions_engine/screening_queue.csv", index=False)
+    df.to_csv("/Users/kishoreu/Documents/GitHub/sanctions-pep-screener/data/screening_queue.csv", index=False)
     print(f"✅ Screening queue: {len(df)} names | Clean: {(df['_true_label']=='clean').sum()} | True hits: {(df['_true_label']=='hit').sum()} | Fuzzy hits: {(df['_true_label']=='fuzzy_hit').sum()}")
     return df
 
 
 def run_screening():
     """Run fuzzy name matching against sanctions + PEP lists."""
-    df = pd.read_csv("/home/claude/sanctions_engine/screening_queue.csv")
+    df = pd.read_csv("/Users/kishoreu/Documents/GitHub/sanctions-pep-screener/data/screening_queue.csv")
 
     # Build flat watchlist: name + all aliases
     watchlist_entries = []
@@ -203,7 +205,7 @@ def run_screening():
         })
 
     results_df = pd.DataFrame(results)
-    results_df.to_csv("/home/claude/sanctions_engine/screening_results.csv", index=False)
+    results_df.to_csv("/Users/kishoreu/Documents/GitHub/sanctions-pep-screener/data/screening_results.csv", index=False)
 
     # ── METRICS ────────────────────────────────────────────────────────────
     total      = len(results_df)
@@ -268,7 +270,7 @@ def run_screening():
         "score_dist":     score_dist,
     }
 
-    with open("/home/claude/sanctions_engine/screening_output.json", "w") as f:
+    with open("/Users/kishoreu/Documents/GitHub/sanctions-pep-screener/data/screening_output.json", "w") as f:
         json.dump(output, f, indent=2)
 
     print(f"✅ Screening complete!")
