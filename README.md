@@ -135,7 +135,7 @@ pip install pandas numpy rapidfuzz
 python sanctions_screener.py
 open sanctions_dashboard.html
 ```
-
+##### [live Demo](https://ukishore33.github.io/sanctions-pep-screener/)
 ---
 
 ## 👤 Author
