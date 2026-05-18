@@ -138,6 +138,22 @@ open sanctions_dashboard.html
 ##### [live Demo](https://ukishore33.github.io/sanctions-pep-screener/)
 ---
 
+## Production Architecture Note — NICE Actimize Parallel
+
+This project replicates the core logic of NICE Actimize's sanctions screening modules:
+
+Sanctions Screener (P3) parallels Actimize WLF (Watch List Filtering):
+- Fuzzy matching logic replicates Actimize's name matching algorithm
+- Tiered alert thresholds mirror Actimize's match score categories
+- OFAC/UN/EU/HMT coverage matches Actimize WLF's default list set
+- Alert disposition (BLOCK/REVIEW/CLEAR) mirrors Actimize workflow
+
+Key difference: Actimize operates on real transaction data at 
+bank scale with full regulatory audit trails. This project 
+demonstrates understanding of the same underlying logic in a 
+Python/open-source implementation.
+
+---
 ## 👤 Author
 
 **Kishore U.**  
